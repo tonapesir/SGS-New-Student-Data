@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>नवीन प्रवेश - विद्यार्थी माहिती फॉर्म</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans Devanagari', 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg,#e8f0fe,#f5f7fa);
+    margin: 0;
+    padding: 20px 10px;
+    color: #1a1a2e;
+  }
+  .container {
+    max-width: 620px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    overflow: hidden;
+  }
+  .header {
+    background: linear-gradient(135deg,#1e3a8a,#2563eb);
+    color: #fff;
+    padding: 22px 20px;
+    text-align: center;
+  }
+  .header h1 { margin: 0; font-size: 20px; }
+  .header p { margin: 6px 0 0; font-size: 13px; opacity: 0.9; }
+  form { padding: 24px 22px 30px; }
+  .field { margin-bottom: 18px; }
+  label {
+    display: block;
+    font-weight: 600;
+    font-size: 14.5px;
+    margin-bottom: 6px;
+    color: #16213e;
+  }
+  label .req { color: #dc2626; }
+  input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+    background: #fafafa;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+    background: #fff;
+  }
+  input.invalid, select.invalid { border-color: #dc2626; background: #fef2f2; }
+  .hint { font-size: 12px; color: #6b7280; margin-top: 4px; }
+  .error-msg { font-size: 12.5px; color: #dc2626; margin-top: 4px; display: none; }
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg,#2563eb,#1d4ed8);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16.5px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: transform .1s, opacity .15s;
+  }
+  .submit-btn:active { transform: scale(0.98); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  #statusBox {
+    display: none;
+    margin: 0 22px 22px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-size: 14.5px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .status-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+  .status-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+  .status-loading { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>नवीन प्रवेश - विद्यार्थी माहिती फॉर्म</h1>
+    <p>हजेरी पटासाठी आवश्यक माहिती भरा</p>
+  </div>
+
+  <div id="statusBox"></div>
+
+  <form id="admissionForm" novalidate>
+
+    <div class="field">
+      <label>वर्ग व तुकडी <span class="req">*</span></label>
+      <select id="vargTukdi" required>
+        <option value="">-- निवडा --</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>रजिस्टर क्र. <span class="req">*</span></label>
+      <input type="text" id="registerNo" inputmode="numeric" placeholder="उदा. 25" required>
+      <div class="error-msg" id="err-registerNo">कृपया वैध रजिस्टर क्रमांक टाका (फक्त अंक)</div>
+    </div>
+
+    <div class="field">
+      <label>जन्म तारीख (dd/mm/yyyy) <span class="req">*</span></label>
+      <input type="text" id="janmaTarikh" placeholder="dd/mm/yyyy" maxlength="10" required>
+      <div class="hint">उदा. 15/08/2012 — टाइप करून लिहा</div>
+      <div class="error-msg" id="err-janmaTarikh">कृपया योग्य तारीख dd/mm/yyyy स्वरूपात टाका</div>
+    </div>
+
+    <div class="field">
+      <label>आईचे नाव <span class="req">*</span></label>
+      <input type="text" id="aaicheNav" placeholder="आईचे पूर्ण नाव" required>
+      <div class="error-msg" id="err-aaicheNav">फक्त अक्षरे टाका (अंक/चिन्हे नकोत)</div>
+    </div>
+
+    <div class="field">
+      <label>प्रवर्ग <span class="req">*</span></label>
+      <select id="pravarg" required>
+        <option value="">-- निवडा --</option>
+        <option value="SC">SC</option>
+        <option value="ST">ST</option>
+        <option value="SBC">SBC</option>
+        <option value="VJA">VJA</option>
+        <option value="NTB">NTB</option>
+        <option value="NTC">NTC</option>
+        <option value="NTD">NTD</option>
+        <option value="GEN">GEN</option>
+        <option value="SEBC">SEBC</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>जात <span class="req">*</span></label>
+      <input type="text" id="jaat" placeholder="धर्म व जात (उदा. हिंदू कुणबी)" required>
+      <div class="error-msg" id="err-jaat">फक्त अक्षरे टाका (अंक/चिन्हे नकोत)</div>
+    </div>
+
+    <div class="field">
+      <label>आधार क्रमांक <span class="req">*</span></label>
+      <input type="text" id="aadhar" inputmode="numeric" maxlength="12" placeholder="12 अंकी आधार क्रमांक" required>
+      <div class="error-msg" id="err-aadhar">आधार क्रमांक फक्त 12 अंकांचा असावा</div>
+    </div>
+
+    <div class="field">
+      <label>लिंग <span class="req">*</span></label>
+      <select id="ling" required>
+        <option value="">-- निवडा --</option>
+        <option value="Female">Female</option>
+        <option value="Male">Male</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>विद्यार्थी नाव <span class="req">*</span></label>
+      <input type="text" id="vidyarthiNav" placeholder="विद्यार्थ्याचे पूर्ण नाव ( उदा. कविता रमेश चौधरी)" required>
+      <div class="error-msg" id="err-vidyarthiNav">फक्त अक्षरे टाका (अंक/चिन्हे नकोत)</div>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">सबमिट करा</button>
+  </form>
+</div>
+
+<script>
+// ===================== CONFIG =====================
+// खाली तुमच्या Google Apps Script Web App ची URL टाका (Code.gs deploy केल्यावर मिळेल)
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwR5rdSbfFKVQTYh4lXBjXIbf7MZEt_RwLdxBRx7dAcwZB-cdlFlVN5B11cTiT7aved/exec";
+// ====================================================
+
+// वर्ग + तुकडी dropdown तयार करणे (5वी ते 10वी, अ ते आय)
+const classes = ["5", "6", "7", "8", "9", "10"];
+const divisions = ["अ","ब","क","ड","इ","फ","ग","ह","आय"]; // A to I
+const vargSelect = document.getElementById("vargTukdi");
+classes.forEach(function(c) {
+  const optgroup = document.createElement("optgroup");
+  optgroup.label = "इयत्ता " + c + " वी";
+  divisions.forEach(function(d) {
+    const opt = document.createElement("option");
+    opt.value = c + "-" + d;
+    opt.textContent = c + " वी - " + d;
+    optgroup.appendChild(opt);
+  });
+  vargSelect.appendChild(optgroup);
+});
+
+// फक्त अक्षरी इनपुट (मराठी + इंग्रजी अक्षरे, स्पेस)
+const alphaRegex = /^[a-zA-Zऀ-ॿ\s.]+$/;
+
+function onlyDigits(el) {
+  el.addEventListener("input", function() {
+    el.value = el.value.replace(/[^0-9]/g, "");
+  });
+}
+onlyDigits(document.getElementById("registerNo"));
+onlyDigits(document.getElementById("aadhar"));
+
+// जन्म तारीख टाइप करताना आपोआप dd/mm/yyyy स्वरूपात स्लॅश टाकणे
+const dobInput = document.getElementById("janmaTarikh");
+dobInput.addEventListener("input", function() {
+  let v = dobInput.value.replace(/[^0-9]/g, "");
+  if (v.length > 8) v = v.slice(0, 8);
+  let formatted = v;
+  if (v.length > 4) {
+    formatted = v.slice(0,2) + "/" + v.slice(2,4) + "/" + v.slice(4);
+  } else if (v.length > 2) {
+    formatted = v.slice(0,2) + "/" + v.slice(2);
+  }
+  dobInput.value = formatted;
+});
+
+function isValidDate(dd, mm, yyyy) {
+  dd = parseInt(dd, 10); mm = parseInt(mm, 10); yyyy = parseInt(yyyy, 10);
+  if (yyyy < 1990 || yyyy > 2025) return false;
+  const d = new Date(yyyy, mm - 1, dd);
+  return d.getFullYear() === yyyy && (d.getMonth() + 1) === mm && d.getDate() === dd;
+}
+
+function showError(inputEl, errEl, show) {
+  if (show) {
+    inputEl.classList.add("invalid");
+    errEl.style.display = "block";
+  } else {
+    inputEl.classList.remove("invalid");
+    errEl.style.display = "none";
+  }
+}
+
+function validateForm() {
+  let valid = true;
+
+  // वर्ग
+  if (!vargSelect.value) { vargSelect.classList.add("invalid"); valid = false; }
+  else vargSelect.classList.remove("invalid");
+
+  // रजिस्टर क्र.
+  const regNo = document.getElementById("registerNo");
+  const regOk = regNo.value.trim().length > 0;
+  showError(regNo, document.getElementById("err-registerNo"), !regOk);
+  if (!regOk) valid = false;
+
+  // जन्म तारीख
+  const dobMatch = dobInput.value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  const dobOk = dobMatch && isValidDate(dobMatch[1], dobMatch[2], dobMatch[3]);
+  showError(dobInput, document.getElementById("err-janmaTarikh"), !dobOk);
+  if (!dobOk) valid = false;
+
+  // आईचे नाव
+  const aaiName = document.getElementById("aaicheNav");
+  const aaiOk = alphaRegex.test(aaiName.value.trim());
+  showError(aaiName, document.getElementById("err-aaicheNav"), !aaiOk);
+  if (!aaiOk) valid = false;
+
+  // प्रवर्ग
+  const pravarg = document.getElementById("pravarg");
+  if (!pravarg.value) { pravarg.classList.add("invalid"); valid = false; }
+  else pravarg.classList.remove("invalid");
+
+  // जात
+  const jaat = document.getElementById("jaat");
+  const jaatOk = alphaRegex.test(jaat.value.trim());
+  showError(jaat, document.getElementById("err-jaat"), !jaatOk);
+  if (!jaatOk) valid = false;
+
+  // आधार
+  const aadhar = document.getElementById("aadhar");
+  const aadharOk = /^\d{12}$/.test(aadhar.value.trim());
+  showError(aadhar, document.getElementById("err-aadhar"), !aadharOk);
+  if (!aadharOk) valid = false;
+
+  // लिंग
+  const ling = document.getElementById("ling");
+  if (!ling.value) { ling.classList.add("invalid"); valid = false; }
+  else ling.classList.remove("invalid");
+
+  // विद्यार्थी नाव
+  const vName = document.getElementById("vidyarthiNav");
+  const vOk = alphaRegex.test(vName.value.trim());
+  showError(vName, document.getElementById("err-vidyarthiNav"), !vOk);
+  if (!vOk) valid = false;
+
+  return valid;
+}
+
+function showStatus(msg, type) {
+  const box = document.getElementById("statusBox");
+  box.style.display = "block";
+  box.className = "status-" + type;
+  box.textContent = msg;
+}
+
+document.getElementById("admissionForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  if (!validateForm()) {
+    showStatus("कृपया सर्व माहिती योग्य प्रकारे भरा.", "error");
+    return;
+  }
+
+  if (!SCRIPT_URL || SCRIPT_URL.indexOf("PASTE_YOUR") !== -1) {
+    showStatus("Google Sheets जोडणी सेट केलेली नाही (SCRIPT_URL टाका).", "error");
+    return;
+  }
+
+  const submitBtn = document.getElementById("submitBtn");
+  submitBtn.disabled = true;
+  showStatus("माहिती पाठवली जात आहे, कृपया थांबा...", "loading");
+
+  const [vargV, tukdiV] = vargSelect.value.split("-");
+  const data = {
+    varg: vargV + " वी",
+    tukdi: tukdiV,
+    registerNo: document.getElementById("registerNo").value.trim(),
+    janmaTarikh: dobInput.value.trim(),
+    aaicheNav: document.getElementById("aaicheNav").value.trim(),
+    pravarg: document.getElementById("pravarg").value,
+    jaat: document.getElementById("jaat").value.trim(),
+    aadhar: document.getElementById("aadhar").value.trim(),
+    ling: document.getElementById("ling").value,
+    vidyarthiNav: document.getElementById("vidyarthiNav").value.trim()
+  };
+
+  const formBody = new URLSearchParams(data).toString();
+
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: formBody
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(res) {
+    submitBtn.disabled = false;
+    if (res && res.result === "success") {
+      showStatus("माहिती यशस्वीरित्या जतन झाली! धन्यवाद.", "success");
+      const savedVarg = vargSelect.value; // वर्ग व तुकडी ची निवड कायम ठेवण्यासाठी
+      document.getElementById("admissionForm").reset();
+      vargSelect.value = savedVarg;
+    } else {
+      showStatus("त्रुटी आली: " + (res && res.message ? res.message : "कृपया पुन्हा प्रयत्न करा."), "error");
+    }
+  })
+  .catch(function(err) {
+    submitBtn.disabled = false;
+    showStatus("नेटवर्क त्रुटी. कृपया पुन्हा प्रयत्न करा.", "error");
+  });
+});
+</script>
+
+</body>
+</html>
