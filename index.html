@@ -80,6 +80,7 @@
     font-size: 14.5px;
     font-weight: 600;
     text-align: center;
+    white-space: pre-line;
   }
   .status-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
   .status-error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
@@ -174,7 +175,7 @@
 <script>
 // ===================== CONFIG =====================
 // खाली तुमच्या Google Apps Script Web App ची URL टाका (Code.gs deploy केल्यावर मिळेल)
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwR5rdSbfFKVQTYh4lXBjXIbf7MZEt_RwLdxBRx7dAcwZB-cdlFlVN5B11cTiT7aved/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrSbZyCHL0VqU-WlbmCJj6T3hFa8hOTaEyJ7KnVZUses5SiXmdiCUs56Oc3i6vkfyh/exec";
 // ====================================================
 
 // वर्ग + तुकडी dropdown तयार करणे (5वी ते 10वी, अ ते आय)
@@ -340,7 +341,13 @@ document.getElementById("admissionForm").addEventListener("submit", function(e) 
   .then(function(res) {
     submitBtn.disabled = false;
     if (res && res.result === "success") {
-      showStatus("माहिती यशस्वीरित्या जतन झाली! धन्यवाद.", "success");
+      const nameMsg = res.studentName
+        ? res.studentName + " यांची माहिती यशस्वीरित्या जतन झाली! धन्यवाद."
+        : "माहिती यशस्वीरित्या जतन झाली! धन्यवाद.";
+      const countMsg = (res.varg && res.tukdi && typeof res.classCount !== "undefined")
+        ? "\n" + res.varg + " " + res.tukdi + " साठी एकूण नोंदवलेले विद्यार्थी संख्या : " + res.classCount
+        : "";
+      showStatus(nameMsg + countMsg, "success");
       const savedVarg = vargSelect.value; // वर्ग व तुकडी ची निवड कायम ठेवण्यासाठी
       document.getElementById("admissionForm").reset();
       vargSelect.value = savedVarg;
